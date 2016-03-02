@@ -202,6 +202,29 @@ def init():
 	print('Ready!\n\n--------------COMMANDS--------------')
 
 
+def login_fast():
+	from robobrowser import RoboBrowser
+	from bs4 import BeautifulSoup as bs
+
+	browser = RoboBrowser(history=True)
+	browser.open('https://m.facebook.com/')
+	#FORM FILL
+	form = browser.get_form()
+	form['email'].value=mail
+	form['pass'].value=password
+	browser.submit_form(form)
+	#PARSER (can also be implemented from robobrowser)
+	soup = browser.parsed
+	try:
+		soup = soup.find("label", {"for" : "u_0_0"})
+		username = soup.a
+		username.clear()
+		username = str(username)
+		profile = username[username.find('/')+1 : username.find('?')]
+		#print (profile)
+	except:
+		print("wrong credentials!")
+
 if __name__ == '__main__':
 	init()
 	while True:
